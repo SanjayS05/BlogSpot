@@ -4,9 +4,14 @@ const { default: mongoose } = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const upload = multer({dest:'uploads/'});
+const fs = require('fs');
+
 const app = express();
 
 const User = require('./models/User');
+const Post = require('./models/Post');
 
 const salt = bcrypt.genSaltSync(10);
 const secret = "cookiecookie";
@@ -74,6 +79,29 @@ app.get('/profile' , (req,res) =>{
 app.post("/logout", (req,res) =>{
     res.cookie('token', '').json('ok');
 })  
+
+app.post('/post', upload.single('file'), async (req, res) => {
+    try {
+        const { originalname, path } = req.file;
+        const parts = originalname.split('.');
+        const fileExtension = parts[parts.length - 1];
+        const newPath =  path+'.'+fileExtension
+        fs.renameSync(path, newPath);
+
+        const {title, summary, content} = req.body;
+        const postCreated = await Post.create({
+            title,
+            summary,
+            content,
+            cover:newPath,
+        });
+        res.status(200).json(postCreated);
+    } catch (error) {
+        res.status(400).json(err);
+    }
+    
+
+})
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
