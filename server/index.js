@@ -3,14 +3,17 @@ const cors = require('cors');
 const { default: mongoose } = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 const app = express();
 
 const User = require('./models/User');
 
 const salt = bcrypt.genSaltSync(10);
 const secret = "cookiecookie";
+
 app.use(cors({credentials: true, origin:'http://localhost:5173'})); 
 app.use(express.json());
+app.use(cookieParser());
 
 mongoose.connect('mongodb+srv://Blogs:blogs@blogging.pculr.mongodb.net/', {
   useNewUrlParser: true,
@@ -46,6 +49,10 @@ app.post('/login', async (req, res) => {
     }catch(err){
         res.status(400).json(err);
     }
+})
+
+app.get('/profile' , (req,res) =>{
+    res.json(req.cookies);
 })
 
 app.listen(3000, () => {
