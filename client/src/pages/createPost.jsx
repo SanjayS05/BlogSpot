@@ -39,7 +39,7 @@ export default function CreatePost(){
         
         e.preventDefault();
 
-        const postResponse = await axios.post('http://localhost:3000/post', data)
+        const postResponse = await axios.post('http://localhost:3000/post', data, {withCredentials: true })
         console.log(postResponse.status);
         if(postResponse.status === 200)
         {
@@ -50,8 +50,7 @@ export default function CreatePost(){
     }
 
     if(redirect){
-        <Navigate to={"/"}/>
-        console.log('hello')
+        return <Navigate to={"/"}/>;
     }
     
     return (

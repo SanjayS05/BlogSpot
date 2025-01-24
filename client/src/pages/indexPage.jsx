@@ -1,11 +1,26 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import Post from '../components/post';
 
-export default function indexPage(){
+export default function IndexPage(){
+
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/post')
+            .then(response => {
+                setPosts(response.data);
+            })
+            .catch(error => {
+                console.error("There was an error fetching the posts!", error);
+            });
+    }, []);
+    
     return(
         <>
-            <Post />
-            <Post />
-            <Post />
+           {posts.length > 0 && posts.map(post => { 
+                return <Post {...post} key={post.id} />;
+           })}
         </>
     );
 }

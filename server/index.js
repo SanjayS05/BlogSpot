@@ -19,6 +19,7 @@ const secret = "cookiecookie";
 app.use(cors({credentials: true, origin:'http://localhost:5173'})); 
 app.use(express.json());
 app.use(cookieParser());
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 mongoose.connect('mongodb+srv://Blogs:blogs@blogging.pculr.mongodb.net/', {
   useNewUrlParser: true,
@@ -88,19 +89,34 @@ app.post('/post', upload.single('file'), async (req, res) => {
         const newPath =  path+'.'+fileExtension
         fs.renameSync(path, newPath);
 
-        const {title, summary, content} = req.body;
-        const postCreated = await Post.create({
-            title,
-            summary,
-            content,
-            cover:newPath,
+        const {token} = req.cookies
+
+        jwt.verify(token, secret, async (err, data) => {
+            if(err) res.status(400).json(err);
+            const {title, summary, content} = req.body;
+            const postCreated = await Post.create({
+                title,
+                summary,
+                content,
+                cover:newPath,
+                author:data.id
+            });
+            res.status(200).json(postCreated);
         });
-        res.status(200).json(postCreated);
+
+        
+        
     } catch (error) {
         res.status(400).json(err);
     }
-    
+})
 
+app.get('/post', async (req,res) =>{
+    const posts = await Post.find()
+        .populate('author', ['username'])
+        .sort({createdAt: -1})
+        .limit(10)
+    res.json(posts);
 })
 
 app.listen(3000, () => {
