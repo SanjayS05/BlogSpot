@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import './App.css';
-import Post from './components/post';
-import Header from './components/header';
+import IndexPage from './pages/indexPage';
+import LoginPage from './pages/loginPage';
+import RegisterPage from './pages/registerPage';
 import Layout from './components/layout';
 import { Route, Routes } from 'react-router-dom';
 
@@ -9,13 +10,10 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={ <Layout /> }>
-        <Route index element={ <Post />} />
-        </Route>
-          <Route path={'/login'} element={
-            <div>
-              Login page
-            </div>
-          }/>
+        <Route index element={ <IndexPage /> } />
+        <Route path={'/login'} element={ <LoginPage /> }/>
+        <Route path={'/register'} element={ <RegisterPage /> }/>
+      </Route>
     </Routes>
   )
 }
