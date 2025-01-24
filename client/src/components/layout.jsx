@@ -10,3 +10,5 @@ function layout()
         </main>
     );
 }
+
+export default layout;
