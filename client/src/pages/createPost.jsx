@@ -40,7 +40,6 @@ export default function CreatePost(){
         e.preventDefault();
 
         const postResponse = await axios.post('http://localhost:3000/post', data, {withCredentials: true })
-        console.log(postResponse.status);
         if(postResponse.status === 200)
         {
             console.log(postResponse.data);

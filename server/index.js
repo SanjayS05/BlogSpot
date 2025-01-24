@@ -103,9 +103,6 @@ app.post('/post', upload.single('file'), async (req, res) => {
             });
             res.status(200).json(postCreated);
         });
-
-        
-        
     } catch (error) {
         res.status(400).json(err);
     }
@@ -118,6 +115,19 @@ app.get('/post', async (req,res) =>{
         .limit(10)
     res.json(posts);
 })
+
+app.get('/post/:id', async (req,res) =>{
+    const { id } = req.params; 
+    try {
+        const post = await Post.findById(id).populate('author', ['username']);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' }); 
+        }
+        res.status(200).json(post); 
+    } catch (error) {
+        res.status(400).json({ message: 'Error retrieving post', error }); 
+    }
+});
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');

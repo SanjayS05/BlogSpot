@@ -51,6 +51,11 @@ nav{
     font-size: 1.8rem;
 }
 
+div.post div.texts a{
+    text-decoration: none;
+    color: inherit;
+}
+
 .info{
     margin: 6px 0;
     color: #888;
@@ -101,4 +106,39 @@ form h1{
 
 .create-post button{
     margin-top: 5px;
+}
+
+div.post-page div.image{
+    max-height: 200px;
+    display: flex;  
+    overflow: hidden;
+}
+
+div.post-page div.image img{
+    object-fit: cover;
+    object-position: center center;
+}
+
+div.post-page a{
+    color: #333;
+    text-decoration: underline;
+}
+
+div.post-page h1{
+    text-align: center;
+    margin: 10px 0 px 5px;
+}
+
+div.post-page time{
+    text-align: center;
+    display: block;
+    font-size: 0.7rem;
+    color: #aaa;
+}
+
+.post-page .author{
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 0.7rem;
+    font-weight: bold; 
 }

@@ -6,6 +6,7 @@ import LoginPage from './pages/loginPage';
 import RegisterPage from './pages/registerPage';
 import Layout from './components/layout';
 import CreatePost from './pages/createPost';
+import PostPage from './pages/postPage';
 
 export default function App() {
   return (
@@ -13,9 +14,10 @@ export default function App() {
       <Routes>
         <Route path="/" element={ <Layout /> }>
           <Route index element={ <IndexPage /> } />
-          <Route path={'/login'} element={ <LoginPage /> }/>
-          <Route path={'/register'} element={ <RegisterPage /> }/>
-          <Route path={'/create'} element={<CreatePost />}/>
+          <Route path='/login' element={ <LoginPage /> }/>
+          <Route path='/register' element={ <RegisterPage /> }/>
+          <Route path='/create' element={<CreatePost />}/>
+          <Route path='/post/:id' element={<PostPage />}/>
         </Route>
       </Routes>
     </UserContextProvider>
