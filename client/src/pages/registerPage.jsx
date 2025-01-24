@@ -1,15 +1,15 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
-function registerPage(){
+function RegisterPage(){
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     async function register(e){
         e.preventDefault();
-        await fetch('https://localhost:3000/register', {
+        await fetch('http://localhost:3000/register', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({username, password})
+            body: JSON.stringify({username, password}),
+            headers: { 'Content-Type': 'application/json'}
             })
     }
     return (
@@ -30,4 +30,4 @@ function registerPage(){
     );
 }
 
-export default registerPage;
+export default RegisterPage;
