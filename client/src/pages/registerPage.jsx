@@ -39,5 +39,3 @@ export default function RegisterPage(){
         </form>
     );
 }
-
-// export default RegisterPage;

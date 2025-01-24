@@ -1,16 +1,49 @@
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import axios from 'axios';
+import { UserContext } from './userContext';
+
 function header()
 {
-    useEffect(() =>{
-        axios.get('http://localhost:3000/profile', {withCredentials: true})
-    }, [])
+    const {setUserInfo, userInfo} = useContext(UserContext);
+    useEffect(() => {
+        axios.get('http://localhost:3000/profile', { withCredentials: true })
+          .then(res => {
+            setUserInfo(res)
+          })
+          .catch(error => {
+            console.error('Error fetching profile:', error);
+          });
+      }, []);
+
+      function logout() {
+        axios.post('http://localhost:3000/logout', {}, { withCredentials: true })
+          .then(() => {
+            setUserInfo(null);
+          })
+          .catch(error => {
+            console.error('Error logging out:', error);
+          });
+      }
+
+      const username = userInfo.username
+
     return (
         <header>
-            <Link to="" className='logo'>MyBlog</Link>
+            <Link to="/" className='logo'>MyBlog</Link>
             <nav>
-                <Link to="/login">Login</Link>
-                <Link to="/register">Register</Link>
+                {username && (
+                    <>
+                        <Link to='/create'>Create new post</Link>
+                        <a onClick={logout}>Logout</a>
+                    </>
+                )}
+                {!username && (
+                    <>
+                        <Link to="/login">Login</Link>
+                        <Link to="/register">Register</Link>
+                    </>
+                )}
             </nav>
         </header>
     );

@@ -52,8 +52,16 @@ app.post('/login', async (req, res) => {
 })
 
 app.get('/profile' , (req,res) =>{
-    res.json(req.cookies);
-})
+    const {token} = req.cookies;
+    jwt.verify(token, secret, (err, data) => {
+        if(err) res.status(400).json(err);
+        res.status(200).json(data);
+    });
+});
+
+app.post("/logout", (req,res) =>{
+    res.cookie('token', '').json('ok');
+})  
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');

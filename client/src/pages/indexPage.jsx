@@ -1,6 +1,6 @@
 import Post from '../components/post';
 
-function indexPage(){
+export default function indexPage(){
     return(
         <>
             <Post />
@@ -9,5 +9,3 @@ function indexPage(){
         </>
     );
 }
-
-export default indexPage;

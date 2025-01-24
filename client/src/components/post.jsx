@@ -1,4 +1,4 @@
-function post() {
+export default function post() {
   return (
     <div className='post'>
         <div className="image">
@@ -17,5 +17,3 @@ function post() {
     </div>
   );
 }
-
-export default post;
