@@ -1,17 +1,27 @@
 import { useState } from 'react';
+import axios from 'axios';
 
-function RegisterPage(){
+export default function RegisterPage(){
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    async function register(e){
+    async function register(e) {
         e.preventDefault();
-        await fetch('http://localhost:3000/register', {
-            method: 'POST',
-            body: JSON.stringify({username, password}),
-            headers: { 'Content-Type': 'application/json'}
-            })
+        try {
+            const response = await axios.post('http://localhost:3000/register', {
+                username,
+                password,
+            });
+            if (response.status === 200) {
+                alert('Registered successfully!');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to register');
+        }
     }
+
+
     return (
         <form className="register" onSubmit={register}>
             <h1>Register</h1>
@@ -30,4 +40,4 @@ function RegisterPage(){
     );
 }
 
-export default RegisterPage;
+// export default RegisterPage;
