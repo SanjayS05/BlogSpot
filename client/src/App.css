@@ -98,3 +98,7 @@ button{
 form h1{
     text-align: center;
 }
+
+.create-post button{
+    margin-top: 5px;
+}

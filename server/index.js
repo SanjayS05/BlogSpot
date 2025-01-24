@@ -33,13 +33,24 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
+        if (!username || !password) {
+            return res.status(400).json({ error: 'Username and password are required' });
+        }
+        
         const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+          }
+
         const checkPass = bcrypt.compareSync(password,user.password);
         if(checkPass)
         {
             jwt.sign({username,id:user._id}, secret, {}, (err,token) =>{
                 if(err) throw err;
-                res.cookie("token",token).json('ok');
+                res.status(200).cookie("token",token).json({
+                    id:user._id,
+                    username
+                });
             })
         } 
         else
@@ -47,6 +58,7 @@ app.post('/login', async (req, res) => {
             res.status(400).json({message: "Invalid password"});
         }
     }catch(err){
+        console.log(err)
         res.status(400).json(err);
     }
 })

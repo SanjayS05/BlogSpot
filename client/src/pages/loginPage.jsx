@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState,useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import axios from 'axios';
+import { UserContext } from '../components/userContext';
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const {setUserInfo} = useContext(UserContext);
 
   async function login(e)
   {
@@ -15,11 +17,12 @@ export default function LoginPage() {
       { username, password },
       { withCredentials: true} 
     );
-      if (response.status === 200) {
-        setRedirect(true);
-      }
+    if (response.status === 200) {
+      const userInfo = response.data;
+      setUserInfo(userInfo);
+      setRedirect(true);
+    }
     } catch (error) {
-      console.error('Error:', error);
       alert('Failed to login');
     }
   } 

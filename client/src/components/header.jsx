@@ -3,9 +3,9 @@ import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { UserContext } from './userContext';
 
-function header()
+export default function header()
 {
-    const {setUserInfo, userInfo} = useContext(UserContext);
+    const { setUserInfo, userInfo } = useContext(UserContext);    
     useEffect(() => {
         axios.get('http://localhost:3000/profile', { withCredentials: true })
           .then(res => {
@@ -14,7 +14,7 @@ function header()
           .catch(error => {
             console.error('Error fetching profile:', error);
           });
-      }, []);
+      }, [setUserInfo]);
 
       function logout() {
         axios.post('http://localhost:3000/logout', {}, { withCredentials: true })
@@ -26,7 +26,7 @@ function header()
           });
       }
 
-      const username = userInfo.username
+    const username = userInfo?.username
 
     return (
         <header>
@@ -49,4 +49,3 @@ function header()
     );
 }
 
-export default header;
