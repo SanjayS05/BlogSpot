@@ -114,7 +114,6 @@ app.put('/post', upload.single('file'), async (req, res) => {
         const { token } = req.cookies;
         let updatedFields = { title, summary, content };
 
-        // If a file is uploaded, process and include it in the update
         if (req.file) {
             const { originalname, path } = req.file;
             const parts = originalname.split('.');
@@ -132,12 +131,10 @@ app.put('/post', upload.single('file'), async (req, res) => {
                 return res.status(404).json({ error: "Post not found" });
             }
 
-            // Ensure the user updating the post is the author
             if (post.author.toString() !== data.id) {
                 return res.status(403).json({ error: "Unauthorized" });
             }
 
-            // Update the post fields
             Object.assign(post, updatedFields);
             const updatedPost = await post.save();
 
