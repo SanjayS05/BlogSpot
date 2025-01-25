@@ -95,7 +95,7 @@ app.post('/post', upload.single('file'), async (req, res) => {
                 summary,
                 content,
                 cover:newPath,
-                author:data._id
+                author:data.id,
             });
             res.status(200).json(postCreated);
         });
