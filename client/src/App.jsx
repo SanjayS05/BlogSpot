@@ -7,6 +7,7 @@ import RegisterPage from './pages/registerPage';
 import Layout from './components/layout';
 import CreatePost from './pages/createPost';
 import PostPage from './pages/postPage';
+import EditPost from './pages/editPost';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path='/register' element={ <RegisterPage /> }/>
           <Route path='/create' element={<CreatePost />}/>
           <Route path='/post/:id' element={<PostPage />}/>
+          <Route path='/edit/:id' element={<EditPost />}/>
         </Route>
       </Routes>
     </UserContextProvider>
