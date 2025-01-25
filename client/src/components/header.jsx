@@ -6,7 +6,7 @@ import { UserContext } from './userContext';
 export default function Header() {
     const { setUserInfo, userInfo } = useContext(UserContext);    
     useEffect(() => {
-        axios.get('http://localhost:3000/profile', { withCredentials: true })
+        axios.get('https://blogspot-g6zd.onrender.com/profile', { withCredentials: true })
           .then(res => {
             setUserInfo(res.data); 
           })
@@ -16,7 +16,7 @@ export default function Header() {
     }, [setUserInfo]);
 
     function logout() {
-        axios.post('http://localhost:3000/logout', {}, { withCredentials: true })
+        axios.post('https://blogspot-g6zd.onrender.com/logout', {}, { withCredentials: true })
           .then(() => {
             setUserInfo(null);
           })
