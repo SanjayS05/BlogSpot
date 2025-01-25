@@ -108,6 +108,48 @@ app.post('/post', upload.single('file'), async (req, res) => {
     }
 })
 
+app.put('/post', upload.single('file'), async (req, res) => {
+    try {
+        const { id, title, summary, content } = req.body;
+        const { token } = req.cookies;
+        let updatedFields = { title, summary, content };
+
+        // If a file is uploaded, process and include it in the update
+        if (req.file) {
+            const { originalname, path } = req.file;
+            const parts = originalname.split('.');
+            const fileExtension = parts[parts.length - 1];
+            const newPath = path + '.' + fileExtension;
+            fs.renameSync(path, newPath);
+            updatedFields.cover = newPath;
+        }
+
+        jwt.verify(token, secret, async (err, data) => {
+            if (err) return res.status(400).json(err);
+
+            const post = await Post.findById(id);
+            if (!post) {
+                return res.status(404).json({ error: "Post not found" });
+            }
+
+            // Ensure the user updating the post is the author
+            if (post.author.toString() !== data.id) {
+                return res.status(403).json({ error: "Unauthorized" });
+            }
+
+            // Update the post fields
+            Object.assign(post, updatedFields);
+            const updatedPost = await post.save();
+
+            res.status(200).json(updatedPost);
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "An error occurred while updating the post" });
+    }
+});
+
+
 app.get('/post', async (req,res) =>{
     const posts = await Post.find()
         .populate('author', ['username'])
