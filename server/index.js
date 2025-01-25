@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const upload = multer({dest:'uploads/'});
 const fs = require('fs');
+require('dotenv').config();
 
 const app = express();
 
@@ -20,11 +21,6 @@ app.use(cors({credentials: true, origin:'http://localhost:5173'}));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
-
-mongoose.connect('mongodb+srv://Blogs:blogs@blogging.pculr.mongodb.net/', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
 
 app.post('/register', async (req, res) => {
     try {
@@ -168,6 +164,12 @@ app.get('/post/:id', async (req,res) =>{
     }
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+app.listen(process.env.PORT, async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URL);
+        console.log("Connected");
+        console.log('Server is running!');
+    } catch (error) {
+        console.log(error);
+    }
 });
