@@ -153,18 +153,3 @@ div.post-page time{
 .post-page content{
     
 }
-
-.post-page .edit-row{
-    text-align: center;
-}
-
-.post-page a.edit-btn{
-    background-color: #333;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px ;
-    color: #fff;
-    padding: 15px 30px;
-    border-radius: 5px;
-    text-decoration: none;
-}
