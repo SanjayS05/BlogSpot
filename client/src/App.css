@@ -1,91 +1,97 @@
-*{
+* {
     box-sizing: border-box;
 }
-
-body{
-    color: #222;
+a {
+    cursor: pointer;
 }
-
-img{
+body {
+    background-color: #f8f9fa; /* Light background */
+    color: #343a40; /* Dark text color */
+}
+img {
     max-width: 100%;
 }
-
-main{
+main {
     padding: 10px;
-    max-width: 960;
+    max-width: 1200px; /* Increased width */
     margin: 0 auto;
 }
 
-header{
+header.dashboard {
+    background-color: #ffffff; /* White background for header */
+    padding: 20px; /* Padding around the header */
+    border-bottom: 2px solid #ccc; /* Lighter border */
+}
+
+header {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
     margin-bottom: 50px;
     align-items: center;
 }
-
-header a{
+header a {
     text-decoration: none;
     color: inherit;
 }
-
-.logo{
+header a.logo {
     font-weight: bold;
     font-size: 1.5rem;
 }
-
-nav{
+header nav {
     display: flex;
-    gap: 15px;
+    gap: 24px;
 }
 
-.post{
+div.post {
+    border: 1px solid #ccc; /* Softer border color */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Padding inside the box */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* More pronounced shadow */
     display: grid;
     grid-template-columns: 1fr;
-
     gap: 20px;
     margin-bottom: 30px;
 }
+div.post:hover {
+    background-color: #e9ecef; /* Light background on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
+}
 @media screen and (min-width: 700px) {
-    .post{
-        grid-template-columns: 0.9fr 1.1fr;
+    div.post {
+        grid-template-columns: .9fr 1.1fr;
     }
 }
 
-.texts h2{
+div.post div.texts h2 {
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 2rem;
 }
-
-div.post div.texts a{
+div.post div.texts a {
     text-decoration: none;
     color: inherit;
 }
-
-.info{
-    margin: 6px 0;
-    color: #888;
-    font-size: 0.7rem;
+div.post p.info {
+    margin: 24px 0;
+    color: #868e96; /* Gray text */
+    font-size: 1rem;
     font-weight: bold;
     display: flex;
     gap: 10px;
 }
-
-.author{
-    color: #333;
+div.post p.info a.author {
+    color: #343a40; /* Dark text */
 }
-
-.summary{
+div.post p.summary {
     margin: 10px 0;
-    line-height: 1.4rem;
+    line-height: 1.8rem;
 }
 
-form.login, form.register{
+form.login, form.register {
     max-width: 400px;
     margin: 0 auto;
 }
-
-input{
+input {
     display: block;
     margin-bottom: 5px;
     width: 100%;
@@ -93,74 +99,83 @@ input{
     border: 2px solid #ddd;
     border-radius: 5px;
     background-color: #fff;
-    border-bottom: 1px solid #ccc;   
 }
-
-button{
+button {
+    cursor: pointer;
     width: 100%;
     display: block;
-    background-color: #555;
-    border: 0;
-    color: #fff;
+    background-color: #007bff; /* Primary button color */
+    color: #fff; /* White text on buttons */
     border-radius: 5px;
-    padding: 7px 0 ;
+    padding: 7px 0;
 }
-
-form h1{
+form.login h1, form.register h1 {
     text-align: center;
 }
 
-.create-post button{
-    margin-top: 5px;
+button.link-btn {
+    background-color: #007bff; /* Primary button color */
+    color: #fff; /* White text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 15px; /* Padding */
+    cursor: pointer; /* Pointer cursor */
+    margin: 5px; /* Margin for spacing */
 }
 
-div.post-page div.image{
-    max-height: 200px;
-    display: flex;  
+div.post-page div.image {
+    max-height: 300px;
+    display: flex;
     overflow: hidden;
 }
-
-div.post-page div.image img{
+div.post-page div.image img {
     object-fit: cover;
     object-position: center center;
     width: 100%;
 }
-
-div.post-page a{
-    color: #333;
+div.post-page a {
+    color: #343a40; /* Dark text */
     text-decoration: underline;
 }
-
-div.post-page h1{
+div.post-page h1 {
     text-align: center;
-    margin: 10px 0 px 5px;
+    margin: 10px 0 5px;
 }
-
-div.post-page time{
+div.post-page time {
     text-align: center;
     display: block;
-    font-size: 0.7rem;
+    font-size: 1rem;
     color: #aaa;
+    margin: 10px 0;
 }
-
-.post-page .author{
+div.post-page div.author {
     text-align: center;
     margin-bottom: 20px;
-    font-size: 0.7rem;
-    font-weight: bold; 
+    font-size: .7rem;
+    font-weight: bold;
 }
-
-div.edit-row{
+div.content p {
+    line-height: 1.7rem;
+    margin: 30px 0;
+}
+div.content li {
+    margin-bottom: 10px;
+}
+div.edit-row {
     text-align: center;
     margin-bottom: 20px;
 }
-div.post-page a.edit-btn{
-    background-color: #333;
+div.post-page a.edit-btn {
+    padding: 10px 20px; /* Reduced padding for smaller button */
+    font-size: 0.9rem; /* Slightly smaller font size */
+    background-color: #28a745; /* Green for edit button */
     display: inline-flex;
     align-items: center;
     gap: 5px;
     color: #fff;
-    padding:15px 30px;
     border-radius: 5px;
     text-decoration: none;
+}
+a svg {
+    height: 20px;
 }
