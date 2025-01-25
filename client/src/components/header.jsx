@@ -38,7 +38,7 @@ export default function Header() {
                     </>
                 ) : (
                     <>
-                        <Navigate to={"/"} />
+                        {/* <Navigate to={"/"} /> */}
                         <Link to="/login">Login</Link>
                         <Link to="/register">Register</Link>
                     </>
