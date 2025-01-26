@@ -95,7 +95,7 @@ app.post("/logout", (req,res) =>{
     fs.renameSync(path, newPath);
   
     const {token} = req.cookies;
-    jwt.verify(token, secret, {}, async (err,info) => {
+    jwt.verify(token, secret, async (err,info) => {
       if (err) throw err;
       const {title,summary,content} = req.body;
       const postDoc = await Post.create({
@@ -121,7 +121,7 @@ app.post("/logout", (req,res) =>{
     }
   
     const {token} = req.cookies;
-    jwt.verify(token, secret, {}, async (err,info) => {
+    jwt.verify(token, secret, async (err,info) => {
       if (err) throw err;
       const {id,title,summary,content} = req.body;
       const postDoc = await Post.findById(id);
