@@ -10,6 +10,7 @@ export default function CreatePost() {
   const [content,setContent] = useState('');
   const [files, setFiles] = useState('');
   const [redirect, setRedirect] = useState(false);
+  const url=`${import.meta.env.VITE_API_URL}`;
   async function createNewPost(ev) {
     const data = new FormData();
     data.set('title', title);
@@ -17,7 +18,7 @@ export default function CreatePost() {
     data.set('content', content);
     data.set('file', files[0]);
     ev.preventDefault();
-    const postResponse = await axios.post('https://blogspot-client.onrender.com/post', data, {withCredentials: true })
+    const postResponse = await axios.post(`${url}/post`, data, {withCredentials: true })
     if(postResponse.status === 200)
     {
         console.log(postResponse.data);

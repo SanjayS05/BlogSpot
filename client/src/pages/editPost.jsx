@@ -10,10 +10,10 @@ export default function EditPost() {
   const [content, setContent] = useState('');
   const [files, setFiles] = useState('');
   const [redirect, setRedirect] = useState(false);
-
+  const url=`${import.meta.env.VITE_API_URL}`;
   useEffect(() => {
     axios
-      .get(`https://blogspot-client.onrender.com/post/${id}`)
+      .get(`${url}/post/${id}`)
       .then((response) => {
         const postInfo = response.data;
         console.log("Fetched Post Info:", postInfo); // Debug log
@@ -38,7 +38,7 @@ export default function EditPost() {
     }
 
     try {
-      const response = await axios.put("https://blogspot-client.onrender.com/post", data, {
+      const response = await axios.put(`${url}/post`, data, {
         withCredentials: true,
       });
 

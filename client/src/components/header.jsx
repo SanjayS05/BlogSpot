@@ -6,9 +6,9 @@ import { UserContext } from './userContext';
 export default function Header() {
     const { setUserInfo, userInfo } = useContext(UserContext);
     const navigate = useNavigate();
-
+    const url=`${import.meta.env.VITE_API_URL}`;
     useEffect(() => {
-        axios.get(`https://blogspot-client.onrender.com/profile`, { withCredentials: true })
+        axios.get(`${url}/profile`, { withCredentials: true })
           .then(res => {
             setUserInfo(res.data); 
           })
@@ -18,7 +18,7 @@ export default function Header() {
     }, [setUserInfo]);
 
     function logout() {
-        axios.post(`https://blogspot-client.onrender.com/logout`, {}, { withCredentials: true })
+        axios.post(`${url}/logout`, {}, { withCredentials: true })
           .then(() => {
             setUserInfo(null);
             navigate('/'); 
