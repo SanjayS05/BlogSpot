@@ -1,15 +1,16 @@
 import {useContext, useEffect, useState} from "react";
-import axios from "axios";
 import {useParams} from "react-router-dom";
 import {formatISO9075} from "date-fns";
 import {UserContext} from "../components/userContext";
 import {Link} from 'react-router-dom';
+import axios from "axios";
 
 export default function PostPage() {
   const [postInfo,setPostInfo] = useState(null);
   const {userInfo} = useContext(UserContext);
   const {id} = useParams();
   const url=`${import.meta.env.VITE_API_URL}`;
+  
   useEffect(() => {
     axios.get(`${url}/post/${id}`)
       .then((response) => {

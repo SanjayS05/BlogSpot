@@ -15,7 +15,7 @@ export default function Header() {
           .catch(error => {
             console.error('Error fetching profile:', error);
           });
-    }, [setUserInfo]);
+    }, []);
 
     function logout() {
         axios.post(`${url}/logout`, {}, { withCredentials: true })
@@ -32,7 +32,7 @@ export default function Header() {
 
     return (
         <header>
-            <Link to="/" className='logo'>MyBlog</Link>
+            <Link to="/" className='logo'>BlogSpot</Link>
             <nav>
                 {username ? (
                     <>

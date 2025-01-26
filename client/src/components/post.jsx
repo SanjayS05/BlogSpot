@@ -1,7 +1,7 @@
 import {format} from "date-fns";
 import { Link } from "react-router-dom";
 
-export default function post({_id,title,summary,cover,content, createdAt,author}) {
+export default function post({_id,title,summary,cover,content,createdAt,author}) {
   const url=`${import.meta.env.VITE_API_URL}`;
   return (
     <div className='post'>
