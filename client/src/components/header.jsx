@@ -1,12 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useContext } from 'react';
 import axios from 'axios';
 import { UserContext } from './userContext';
 
 export default function Header() {
-    const { setUserInfo, userInfo } = useContext(UserContext);    
+    const { setUserInfo, userInfo } = useContext(UserContext);
+    const navigate = useNavigate();
+
     useEffect(() => {
-        axios.get('http://localhost:3000/profile', { withCredentials: true })
+        axios.get(`http://localhost:3000/profile`, { withCredentials: true })
           .then(res => {
             setUserInfo(res.data); 
           })
@@ -16,9 +18,10 @@ export default function Header() {
     }, [setUserInfo]);
 
     function logout() {
-        axios.post('http://localhost:3000/logout', {}, { withCredentials: true })
+        axios.post(`http://localhost:3000/logout`, {}, { withCredentials: true })
           .then(() => {
             setUserInfo(null);
+            navigate('/'); 
           })
           .catch(error => {
             console.error('Error logging out:', error);
@@ -43,5 +46,6 @@ export default function Header() {
                     </>
                 )}
             </nav>
-        </header>)
-};
+        </header>
+    );
+}
