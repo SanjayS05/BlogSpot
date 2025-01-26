@@ -85,22 +85,28 @@ app.post('/post', upload.single('file'), async (req, res) => {
         const newPath =  path+'.'+fileExtension
         fs.renameSync(path, newPath);
 
-        const {token} = req.cookies
+        const { token } = req.cookies;
+
+        if (!token) {
+            return res.status(401).json({ error: 'Token is required' });
+        }
 
         jwt.verify(token, secret, async (err, data) => {
-            if(err) res.status(400).json(err);
-            const {title, summary, content} = req.body;
+            if (err) {
+                return res.status(400).json(err);
+            }
+            const { title, summary, content } = req.body;
             const postCreated = await Post.create({
                 title,
                 summary,
                 content,
-                cover:newPath,
-                author:data.id,
+                cover: newPath,
+                author: data.id,
             });
             res.status(200).json(postCreated);
         });
     } catch (error) {
-        res.status(400).json(err);
+        res.status(400).json(error);
     }
 })
 

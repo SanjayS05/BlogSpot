@@ -13,7 +13,7 @@ export default function EditPost() {
 
   useEffect(() => {
     axios
-      .get(`https://blogspot-g6zd.onrender.com/post/${id}`)
+      .get(`http://localhost:3000/post/${id}`)
       .then((response) => {
         const postInfo = response.data;
         console.log("Fetched Post Info:", postInfo); // Debug log
@@ -38,7 +38,7 @@ export default function EditPost() {
     }
 
     try {
-      const response = await axios.put("https://blogspot-g6zd.onrender.com/post", data, {
+      const response = await axios.put("http://localhost:3000/post", data, {
         withCredentials: true,
       });
 

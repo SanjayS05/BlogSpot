@@ -39,7 +39,7 @@ export default function CreatePost(){
         
         e.preventDefault();
 
-        const postResponse = await axios.post('https://blogspot-g6zd.onrender.com/post', data, {withCredentials: true })
+        const postResponse = await axios.post('http://localhost:3000/post', data, {withCredentials: true })
         if(postResponse.status === 200)
         {
             console.log(postResponse.data);

@@ -7,7 +7,7 @@ export default function IndexPage(){
     const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-        axios.get('https://blogspot-g6zd.onrender.com/post')
+        axios.get('http://localhost:3000/post')
             .then(response => {
                 setPosts(response.data);
             })

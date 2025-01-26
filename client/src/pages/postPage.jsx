@@ -10,7 +10,7 @@ export default function PostPage() {
   const { id } = useParams();
 
   useEffect(() => {
-    axios.get(`https://blogspot-g6zd.onrender.com/post/${id}`)
+    axios.get(`http://localhost:3000/post/${id}`)
       .then((response) => {
         setPostInfo(response.data);
       })
@@ -34,7 +34,7 @@ export default function PostPage() {
             </div>
         )}
         <div className="image">
-            <img src={`https://blogspot-g6zd.onrender.com/${postInfo.cover}`} alt="" />
+            <img src={`http://localhost:3000/${postInfo.cover}`} alt="" />
         </div>
         <div className="content" dangerouslySetInnerHTML={{__html:postInfo.content }}></div>
     </div>

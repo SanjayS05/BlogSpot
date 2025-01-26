@@ -13,7 +13,7 @@ export default function LoginPage() {
   {
     e.preventDefault();
     try {
-      const response = await axios.post('https://blogspot-g6zd.onrender.com/login', 
+      const response = await axios.post('http://localhost:3000/login', 
       { username, password },
       { withCredentials: true} 
     );
