@@ -5,9 +5,9 @@ import Post from '../components/post';
 export default function IndexPage(){
 
     const [posts, setPosts] = useState([]);
-
+    const url=`${import.meta.env.VITE_API_URL}`;
     useEffect(() => {
-        axios.get('https://blogspot-client.onrender.com/post')
+        axios.get(`${url}/post`)
             .then(response => {
                 setPosts(response.data);
             })

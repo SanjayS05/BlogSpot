@@ -9,8 +9,9 @@ export default function PostPage() {
   const [postInfo,setPostInfo] = useState(null);
   const {userInfo} = useContext(UserContext);
   const {id} = useParams();
+  const url=`${import.meta.env.VITE_API_URL}`;
   useEffect(() => {
-    axios.get(`https://blogspot-client.onrender.com/post/${id}`)
+    axios.get(`${url}/post/${id}`)
       .then((response) => {
         setPostInfo(response.data);
       })
@@ -37,7 +38,7 @@ export default function PostPage() {
         </div>
       )}
       <div className="image">
-        <img src={`https://blogspot-client.onrender.com/${postInfo.cover}`} alt=""/>
+        <img src={`${url}/${postInfo.cover}`} alt=""/>
       </div>
       <div className="content" dangerouslySetInnerHTML={{__html:postInfo.content}} />
     </div>

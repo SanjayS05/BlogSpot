@@ -8,12 +8,12 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   const {setUserInfo} = useContext(UserContext);
-
+  const url=`${import.meta.env.VITE_API_URL}`;
   async function login(e)
   {
     e.preventDefault();
     try {
-      const response = await axios.post('https://blogspot-client.onrender.com/login', 
+      const response = await axios.post(`${url}/login`, 
       { username, password },
       { withCredentials: true} 
     );
