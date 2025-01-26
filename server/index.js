@@ -12,16 +12,21 @@ require('dotenv').config();
 
 const app = express();
 
-const User = require('./models/User');
-const Post = require('./models/Post');
+const User = require("./models/User");
+const Post = require("./models/Post");
 
 const salt = bcrypt.genSaltSync(10);
 const secret = "cookiecookie";
 
-app.use(cors({credentials: true, origin:['https://blogspot-client.onrender.com', 'http://localhost:5173']})); 
+app.use(
+  cors({
+    credentials: true,
+    origin: ["https://blogspot-client.onrender.com", "http://localhost:5173"],
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
-app.use('/uploads', express.static(__dirname + '/uploads'));
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
 app.post('/register', async (req,res) => {
     const {username,password} = req.body;
@@ -152,11 +157,11 @@ app.post("/logout", (req,res) =>{
   })
 
 app.listen(process.env.PORT, async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URL);
-        console.log("Connected");
-        console.log('Server is running!');
-    } catch (error) {
-        console.log(error);
-    }
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    console.log("Connected");
+    console.log(`Server is running at ${process.env.PORT}!`);
+  } catch (error) {
+    console.log(error);
+  }
 });
