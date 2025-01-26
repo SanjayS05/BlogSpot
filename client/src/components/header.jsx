@@ -8,7 +8,7 @@ export default function Header() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/profile`, { withCredentials: true })
+        axios.get(`https://blogspot-client.onrender.com/profile`, { withCredentials: true })
           .then(res => {
             setUserInfo(res.data); 
           })
@@ -18,7 +18,7 @@ export default function Header() {
     }, [setUserInfo]);
 
     function logout() {
-        axios.post(`http://localhost:3000/logout`, {}, { withCredentials: true })
+        axios.post(`https://blogspot-client.onrender.com/logout`, {}, { withCredentials: true })
           .then(() => {
             setUserInfo(null);
             navigate('/'); 

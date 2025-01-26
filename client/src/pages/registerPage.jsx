@@ -8,7 +8,7 @@ export default function RegisterPage(){
     async function register(e) {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/register', {
+            const response = await axios.post('https://blogspot-client.onrender.com/register', {
                 username,
                 password,
             });

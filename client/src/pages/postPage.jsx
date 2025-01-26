@@ -10,7 +10,7 @@ export default function PostPage() {
   const {userInfo} = useContext(UserContext);
   const {id} = useParams();
   useEffect(() => {
-    axios.get(`http://localhost:3000/post/${id}`)
+    axios.get(`https://blogspot-client.onrender.com/post/${id}`)
       .then((response) => {
         setPostInfo(response.data);
       })
@@ -37,7 +37,7 @@ export default function PostPage() {
         </div>
       )}
       <div className="image">
-        <img src={`http://localhost:3000/${postInfo.cover}`} alt=""/>
+        <img src={`https://blogspot-client.onrender.com/${postInfo.cover}`} alt=""/>
       </div>
       <div className="content" dangerouslySetInnerHTML={{__html:postInfo.content}} />
     </div>

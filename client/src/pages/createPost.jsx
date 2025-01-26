@@ -17,7 +17,7 @@ export default function CreatePost() {
     data.set('content', content);
     data.set('file', files[0]);
     ev.preventDefault();
-    const postResponse = await axios.post('http://localhost:3000/post', data, {withCredentials: true })
+    const postResponse = await axios.post('https://blogspot-client.onrender.com/post', data, {withCredentials: true })
     if(postResponse.status === 200)
     {
         console.log(postResponse.data);
