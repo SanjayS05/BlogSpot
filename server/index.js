@@ -86,7 +86,7 @@ app.post('/post', upload.single('file'), async (req, res) => {
         fs.renameSync(path, newPath);
 
         const { token } = req.cookies;
-
+        console.log(token)
         if (!token) {
             return res.status(401).json({ error: 'Token is required' });
         }
@@ -103,6 +103,7 @@ app.post('/post', upload.single('file'), async (req, res) => {
                 cover: newPath,
                 author: data.id,
             });
+            // console.log(postCreated)
             res.status(200).json(postCreated);
         });
     } catch (error) {
