@@ -10,6 +10,7 @@ export default function CreatePost() {
   const [content,setContent] = useState('');
   const [files, setFiles] = useState('');
   const [redirect, setRedirect] = useState(false);
+  
   const url=`${import.meta.env.VITE_API_URL}`;
   async function createNewPost(ev) {
     const data = new FormData();

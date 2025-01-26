@@ -13,7 +13,7 @@ export default function EditPost() {
   const url=`${import.meta.env.VITE_API_URL}`;
   useEffect(() => {
     axios
-      .get(`${url}/post/${id}`)
+      .get(`${url}/post/`+id)
       .then((response) => {
         const postInfo = response.data;
         console.log("Fetched Post Info:", postInfo); // Debug log
@@ -24,7 +24,7 @@ export default function EditPost() {
       .catch((error) => {
         console.error("Error fetching post:", error);
       });
-  }, [id]);
+  }, []);
 
   async function updatePost(ev) {
     ev.preventDefault();
@@ -53,7 +53,7 @@ export default function EditPost() {
 
   if (redirect) {
     console.log("Redirecting to post page..."); // Debug log
-    return <Navigate to={'/post/' + id} />;
+    return <Navigate to={'/post/'+id} />;
   }
 
   return (
@@ -78,7 +78,7 @@ export default function EditPost() {
         }}
       />
       <Editor onChange={setContent} value={content} />
-      <button>Update post</button>
+      <button style={{marginTop:'5px'}}>Update post</button>
     </form>
   );
 }

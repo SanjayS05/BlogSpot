@@ -19,7 +19,7 @@ export default function IndexPage(){
     return(
         <>
            {posts.length > 0 && posts.map(post => { 
-                return <Post {...post} key={post.id} />;
+                return <Post {...post}/>;
            })}
         </>
     );

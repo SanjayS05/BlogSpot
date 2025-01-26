@@ -5,7 +5,7 @@ export default function RegisterPage(){
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const url=`${import.meta.env.VITE_API_URL}`;
-    // console.log(url);
+    console.log(url);
     async function register(e) {
         e.preventDefault();
         try {
