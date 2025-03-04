@@ -6,32 +6,33 @@ import { UserContext } from './userContext';
 export default function Header() {
     const { setUserInfo, userInfo } = useContext(UserContext);
     const navigate = useNavigate();
-    const url=`${import.meta.env.VITE_API_URL}`;
+    const url = `${import.meta.env.VITE_API_URL}`;
+
     useEffect(() => {
         axios.get(`${url}/profile`, { withCredentials: true })
-          .then(res => {
-            setUserInfo(res.data); 
-          })
-          .catch(error => {
-            console.error('Error fetching profile:', error);
-          });
+            .then(res => {
+                setUserInfo(res.data);
+            })
+            .catch(error => {
+                console.error('Error fetching profile:', error);
+            });
     }, []);
 
     function logout() {
         axios.post(`${url}/logout`, {}, { withCredentials: true })
-          .then(() => {
-            setUserInfo(null);
-            navigate('/'); 
-          })
-          .catch(error => {
-            console.error('Error logging out:', error);
-          });
+            .then(() => {
+                setUserInfo(null);
+                navigate('/');
+            })
+            .catch(error => {
+                console.error('Error logging out:', error);
+            });
     }
 
     const username = userInfo?.username;
 
     return (
-        <header>
+        <header className="header">
             <Link to="/" className='logo'>BlogSpot</Link>
             <nav>
                 {username ? (

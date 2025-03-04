@@ -16,17 +16,24 @@ const User = require("./models/User");
 const Post = require("./models/Post");
 
 const salt = bcrypt.genSaltSync(10);
-const secret = "cookiecookie";
+const secret = process.env.JWT_SECRET;
 
 app.use(
   cors({
     credentials: true,
-    origin: ["https://blogspot-client.onrender.com", "http://localhost:5173"],
+    origin: 'http://localhost:5173'
   })
 );
 app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
+
+const setCookieOptions = () => ({
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'strict',
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+});
 
 app.post('/register', async (req,res) => {
     const {username,password} = req.body;
@@ -57,12 +64,18 @@ app.post('/login', async (req, res) => {
         const checkPass = bcrypt.compareSync(password,user.password);
         if(checkPass)
         {
-            jwt.sign({username,id:user._id}, secret, {}, (err,token) =>{
+            jwt.sign(
+              {username,id:user._id}, 
+              secret, 
+              {expiresIn: '24h'}, // Fixed expiration format
+              (err,token) =>{
                 if(err) throw err;
-                res.status(200).cookie("token",token).json({
-                    id:user._id,
-                    username
-        });
+                res.status(200)
+                   .cookie("token", token, setCookieOptions())
+                   .json({
+                      id:user._id,
+                      username
+                });
             })
         } 
         else
@@ -78,65 +91,89 @@ app.post('/login', async (req, res) => {
 app.get('/profile', (req,res) => {
     const {token} = req.cookies;
     if (!token) {
-      return res.status(401).json({ error: 'JWT must be provided' });
+      return res.status(401).json({ error: 'Authentication required. Please log in.' });
     }
     jwt.verify(token, secret, {}, (err,info) => {
-      if (err) return res.status(401).json({ error: 'Invalid token' });
+      if (err) {
+        if (err.name === 'TokenExpiredError') {
+          return res.status(401).json({ error: 'Token expired. Please log in again.' });
+        }
+        return res.status(401).json({ error: 'Invalid authentication token.' });
+      }
       res.json(info);
     });
 });
   
 app.post("/logout", (req,res) =>{
-    res.cookie('token', '').json('ok');
+    res.cookie('token', '', { 
+      ...setCookieOptions(),
+      expires: new Date(0)
+    }).json('ok');
 })  
   
-app.post('/post', uploadMiddleware.single('file'), async (req,res) => {
+// Middleware for token verification
+const authenticateToken = (req, res, next) => {
+  const {token} = req.cookies;
+  if (!token) {
+    return res.status(401).json({ error: 'Authentication required. Please log in.' });
+  }
+  jwt.verify(token, secret, (err, user) => {
+    if (err) {
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ error: 'Token expired. Please log in again.' });
+      }
+      return res.status(401).json({ error: 'Invalid authentication token.' });
+    }
+    req.user = user;
+    next();
+  });
+};
+
+app.post('/post', authenticateToken, uploadMiddleware.single('file'), async (req,res) => {
     const {originalname,path} = req.file;
     const parts = originalname.split('.');
     const ext = parts[parts.length - 1];
     const newPath = path+'.'+ext;
     fs.renameSync(path, newPath);
   
-    const {token} = req.cookies;
-    if (!token) {
-      return res.status(401).json({ error: 'JWT must be provided' });
-    }
-    jwt.verify(token, secret, async (err,info) => {
-      if (err) return res.status(401).json({ error: 'Invalid token' });
+    try {
       const {title,summary,content} = req.body;
       const postDoc = await Post.create({
         title,
         summary,
         content,
         cover:newPath,
-        author:info.id,
+        author:req.user.id,
       });
       res.json(postDoc);
-    });
+    } catch (error) {
+      res.status(500).json({ error: 'Error creating post' });
+    }
 });
   
-app.put('/post',uploadMiddleware.single('file'), async (req,res) => {
-    let newPath = null;
-    if (req.file) {
-      const {originalname,path} = req.file;
-      const parts = originalname.split('.');
-      const ext = parts[parts.length - 1];
-      newPath = path+'.'+ext;
-      fs.renameSync(path, newPath);
-    }
+app.put('/post', authenticateToken, uploadMiddleware.single('file'), async (req,res) => {
+    try {
+      let newPath = null;
+      if (req.file) {
+        const {originalname,path} = req.file;
+        const parts = originalname.split('.');
+        const ext = parts[parts.length - 1];
+        newPath = path+'.'+ext;
+        fs.renameSync(path, newPath);
+      }
   
-    const {token} = req.cookies;
-    if (!token) {
-      return res.status(401).json({ error: 'JWT must be provided' });
-    }
-    jwt.verify(token, secret, async (err,info) => {
-      if (err) return res.status(401).json({ error: 'Invalid token' });
       const {id,title,summary,content} = req.body;
       const postDoc = await Post.findById(id);
-      const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
-      if (!isAuthor) {
-        return res.status(400).json('you are not the author');
+      
+      if (!postDoc) {
+        return res.status(404).json({ error: 'Post not found' });
       }
+
+      const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(req.user.id);
+      if (!isAuthor) {
+        return res.status(403).json({ error: 'You are not authorized to edit this post' });
+      }
+
       postDoc.set({
         title,
         summary,
@@ -146,31 +183,42 @@ app.put('/post',uploadMiddleware.single('file'), async (req,res) => {
       await postDoc.save();
   
       res.json(postDoc);
-    });
+    } catch (error) {
+      res.status(500).json({ error: 'Error updating post' });
+    }
 });
   
 app.get('/post', async (req,res) => {
-    res.json(
-      await Post.find()
+    try {
+      const posts = await Post.find()
         .populate('author', ['username'])
         .sort({createdAt: -1})
-        .limit(20)
-    );
+        .limit(20);
+      res.json(posts);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching posts' });
+    }
 });
   
 app.get('/post/:id', async (req, res) => {
-    const {id} = req.params;
-    const postDoc = await Post.findById(id).populate('author', ['username']);
-    res.json(postDoc);
-})
-
+    try {
+      const {id} = req.params;
+      const postDoc = await Post.findById(id).populate('author', ['username']);
+      if (!postDoc) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+      res.json(postDoc);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching post' });
+    }
+});
 
 app.listen(process.env.PORT, async () => {
   try {
     await mongoose.connect(process.env.MONGO_URL);
-    console.log("Connected");
-    console.log(`Server is running at ${process.env.PORT}!`);
+    console.log("Connected to MongoDB");
+    console.log(`Server is running at port ${process.env.PORT}!`);
   } catch (error) {
-    console.log(error);
+    console.error("Error connecting to MongoDB:", error);
   }
 });
